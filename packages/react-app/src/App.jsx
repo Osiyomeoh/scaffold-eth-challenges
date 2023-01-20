@@ -260,14 +260,14 @@ function App(props) {
   const vendorETHBalance = useBalance(localProvider, vendorAddress);
   if (DEBUG) console.log("💵 vendorETHBalance", vendorETHBalance ? ethers.utils.formatEther(vendorETHBalance) : "...");
 
-  const vendorApproval = useContractReader(readContracts, "YourToken", "allowance", [address, vendorAddress]);
+  const vendorApproval = useContractReader(readContracts, "EnovateToken", "allowance", [address, vendorAddress]);
   console.log("🤏 vendorApproval", vendorApproval);
 
-  const vendorTokenBalance = useContractReader(readContracts, "YourToken", "balanceOf", [vendorAddress]);
+  const vendorTokenBalance = useContractReader(readContracts, "EnovateToken", "balanceOf", [vendorAddress]);
   console.log("🏵 vendorTokenBalance:", vendorTokenBalance ? ethers.utils.formatEther(vendorTokenBalance) : "...");
 
-  const yourTokenBalance = useContractReader(readContracts, "YourToken", "balanceOf", [address]);
-  console.log("🏵 yourTokenBalance:", yourTokenBalance ? ethers.utils.formatEther(yourTokenBalance) : "...");
+  const enovateTokenBalance = useContractReader(readContracts, "EnovateToken", "balanceOf", [address]);
+  console.log("🏵 enovateTokenBalance:", enovateTokenBalance ? ethers.utils.formatEther(enovateTokenBalance) : "...");
 
   const tokensPerEth = useContractReader(readContracts, "Vendor", "tokensPerEth");
   console.log("🏦 tokensPerEth:", tokensPerEth ? tokensPerEth.toString() : "...");
@@ -520,7 +520,7 @@ function App(props) {
   const [buying, setBuying] = useState();
 
   let transferDisplay = "";
-  if (yourTokenBalance) {
+  if (enovateTokenBalance) {
     transferDisplay = (
       <div style={{ padding: 8, marginTop: 32, width: 420, margin: "auto" }}>
         <Card title="Transfer tokens">
@@ -549,7 +549,7 @@ function App(props) {
               type={"primary"}
               onClick={() => {
                 tx(
-                  writeContracts.YourToken.transfer(tokenSendToAddress, ethers.utils.parseEther("" + tokenSendAmount)),
+                  writeContracts.EnovateToken.transfer(tokenSendToAddress, ethers.utils.parseEther("" + tokenSendAmount)),
                 );
               }}
             >
@@ -575,7 +575,7 @@ function App(props) {
               }}
               to="/"
             >
-              YourToken
+              EnovateToken
             </Link>
           </Menu.Item>
           <Menu.Item key="/contracts">
@@ -593,9 +593,9 @@ function App(props) {
         <Switch>
           <Route exact path="/">
             <div style={{ padding: 8, marginTop: 32, width: 300, margin: "auto" }}>
-              <Card title="Your Tokens" extra={<a href="#">code</a>}>
+              <Card title="Enovate Tokens" extra={<a href="#">code</a>}>
                 <div style={{ padding: 8 }}>
-                  <Balance balance={yourTokenBalance} fontSize={64} />
+                  <Balance balance={enovateTokenBalance} fontSize={64} />
                 </div>
               </Card>
             </div>
@@ -637,7 +637,7 @@ function App(props) {
                 </div>
               </Card>
             </div>
-            {/*Extra UI for buying the tokens back from the user using "approve" and "sellTokens"
+            Extra UI for buying the tokens back from the user using "approve" and "sellTokens"
 
             <Divider />
             <div style={{ padding: 8, marginTop: 32, width: 300, margin: "auto" }}>
@@ -690,7 +690,7 @@ function App(props) {
                       loading={buying}
                       onClick={async () => {
                         setBuying(true);
-                        await tx(writeContracts.YourToken.approve(readContracts.Vendor.address, tokenSellAmount.valid && ethers.utils.parseEther(tokenSellAmount.value)));
+                        await tx(writeContracts.EnovateToken.approve(readContracts.Vendor.address, tokenSellAmount.valid && ethers.utils.parseEther(tokenSellAmount.value)));
                         setBuying(false);
                         let resetAmount = tokenSellAmount
                         setTokenSellAmount("");
@@ -714,7 +714,7 @@ function App(props) {
 
               </Card>
             </div>
-            */}
+           
             <div style={{ padding: 8, marginTop: 32 }}>
               <div>Vendor Token Balance:</div>
               <Balance balance={vendorTokenBalance} fontSize={64} />
@@ -769,7 +769,7 @@ function App(props) {
               contractConfig={contractConfig}
             />
             <Contract
-              name="YourToken"
+              name="EnovateToken"
               signer={userSigner}
               provider={localProvider}
               address={address}

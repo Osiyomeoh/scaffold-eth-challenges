@@ -8,33 +8,33 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   const chainId = await getChainId();
 
   // You might need the previously deployed yourToken:
-  const yourToken = await ethers.getContract("YourToken", deployer);
+  const enovateToken = await ethers.getContract("EnovateToken", deployer);
 
   // Todo: deploy the vendor
-  // await deploy("Vendor", {
-  //   from: deployer,
-  //   args: [yourToken.address], // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
-  //   log: true,
-  // });
-  //
-  // const vendor = await ethers.getContract("Vendor", deployer);
+   await deploy("Vendor", {
+     from: deployer,
+     args: [enovateToken.address], 
+     log: true,
+   });
+
+   const vendor = await ethers.getContract("Vendor", deployer);
 
   // Todo: transfer the tokens to the vendor
-  // console.log("\n 🏵  Sending all 1000 tokens to the vendor...\n");
-  //
-  // const transferTransaction = await yourToken.transfer(
-  //   vendor.address,
-  //   ethers.utils.parseEther("1000")
-  // );
+  console.log("\n 🏵  Sending all 1000 tokens to the vendor...\n");
+  
+  const transferTransaction = await enovateToken.transfer(
+    vendor.address,
+    ethers.utils.parseEther("1000")
+  );
 
   //console.log("\n    ✅ confirming...\n");
   //await sleep(5000); // wait 5 seconds for transaction to propagate
 
   // ToDo: change address to your frontend address vvvv
   // console.log("\n 🤹  Sending ownership to frontend address...\n")
-  // const ownershipTransaction = await vendor.transferOwnership("** YOUR FRONTEND ADDRESS **");
+  const ownershipTransaction = await vendor.transferOwnership("0x3CA6C93Ac970C41b512Fdbd11384FD79E98140a5");
   // console.log("\n    ✅ confirming...\n");
-  // const ownershipResult = await ownershipTransaction.wait();
+  //const ownershipResult = await ownershipTransaction.wait();
 
   // ToDo: Verify your contract with Etherscan for public chains
   // if (chainId !== "31337") {
